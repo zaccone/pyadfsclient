@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 import argparse
-import logging
 import os
 
 import adfs
 
+
 def build_parser():
-    parser =  argparse.ArgumentParser(description='ADFSClient')
+    parser = argparse.ArgumentParser(description='ADFSClient')
     parser.add_argument('--adfs_url', help='URL of you ADFS server')
     parser.add_argument('--sp_endpoint', default=None,
                         help=('URL of your Service PRovider special endpoint,'
@@ -31,20 +31,20 @@ def build_parser():
                               '(defaults to False)'))
     return parser
 
+
 def set_options(args):
-    options = {}
+    options = dict()
     options['user'] = args.user or os.environ.get('ADFS_USER')
     options['password'] = args.password or os.environ.get('ADFS_PASSWORD')
     options['adfs_url'] = args.adfs_url or os.environ.get('ADFS_URL')
     options['sp_url'] = args.sp_url or os.environ.get('SP_URL')
     options['sp_endpoint'] = args.sp_endpoint or os.environ.get('SP_ENDPOINT')
     options['verify'] = os.environ.get('ADFS_VERIFY_SSL') or args.verify
-    options['cookies'] = os.environ.get('ADFS_COOKIE') or \
-                         args.cookie
-    options['content'] = os.environ.get('ADFS_PRINT_CONTENT') or \
-                         args.content
+    options['cookies'] = os.environ.get('ADFS_COOKIE') or args.cookie
+    options['content'] = os.environ.get('ADFS_PRINT_CONTENT') or args.content
 
     return options
+
 
 def main():
     parser = build_parser()
@@ -56,7 +56,7 @@ def main():
     client.login()
     if all([options['content'], options['sp_url']]):
         print client.access_resource()
-    elif options['content']  and not options['sp_url']:
+    elif options['content'] and not options['sp_url']:
         print "Missing sp_url argument"
 
     if options['cookies']:
