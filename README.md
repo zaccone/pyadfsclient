@@ -11,7 +11,6 @@ from a command line.
 Features:
 
 * Fetch content of the protected resource
-* Display cookie so it can be used later
 
 Dependencies
 ------------
