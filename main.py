@@ -10,7 +10,7 @@ def build_parser():
     parser = argparse.ArgumentParser(description='ADFSClient')
     parser.add_argument('--adfs_url', help='URL of you ADFS server')
     parser.add_argument('--sp_endpoint', default=None,
-                        help=('URL of your Service PRovider special endpoint,'
+                        help=('URL of your Service Provider special endpoint,'
                               'e.g. https://host.example/Shibboleth.sso/ADFS'))
     parser.add_argument('--sp_url', default=None,
                         help='URL of the protected resource')
