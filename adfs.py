@@ -49,9 +49,6 @@ class ADFSClient(object):
     def _first(l):
         return l[0]
 
-    # noinspection PyPep8Naming,PyPep8Naming,PyPep8Naming,PyPep8Naming,
-    # PyPep8Naming
-    # noinspection PyPep8Naming,PyPep8Naming
     def _prepare_adfs_request(self):
 
         """Build the ADFS Request Security Token SOAP message.
@@ -207,7 +204,7 @@ class ADFSClient(object):
     def _get_adfs_security_token(self):
         adfs_response = self.session.post(
             url=self.adfs_url, headers=self.HEADER_SOAP,
-            data=self.prepared_request, verify=self.verify)
+            data=self.prepared_request_str, verify=self.verify)
         # TODO(marek): check response
         self.adfs_token = adfs_response.content
 
