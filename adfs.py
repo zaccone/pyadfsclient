@@ -1,10 +1,10 @@
 import datetime
 import string
-import urllib2
 import uuid
 
 import requests
 from lxml import etree
+from six.moves import urllib
 
 
 class ADFSClient(object):
@@ -32,13 +32,11 @@ class ADFSClient(object):
         self.sp_url = sp_url
         self.valid = valid
         self.verify = verify
-
         self.session = requests.Session()
 
     def _token_dates(self, fmt='%Y-%m-%dT%H:%M:%S.%fZ'):
         date_created = datetime.datetime.utcnow()
-        date_expires = date_created + datetime.timedelta(
-            seconds=self.valid)
+        date_expires = date_created + datetime.timedelta(seconds=self.valid)
         return [_time.strftime(fmt) for _time in (date_created, date_expires)]
 
     @property
@@ -205,7 +203,7 @@ class ADFSClient(object):
         adfs_response = self.session.post(
             url=self.adfs_url, headers=self.HEADER_SOAP,
             data=self.prepared_request_str, verify=self.verify)
-        # TODO(marek): check response
+        adfs_response.raise_for_status()
         self.adfs_token = adfs_response.content
 
     def _prepare_sp_request(self):
@@ -223,15 +221,15 @@ class ADFSClient(object):
             assertion, 'http://docs.oasis-open.org/ws-sx/ws-trust/200512',
             'http://schemas.xmlsoap.org/ws/2005/02/trust')
 
-        encoded_assertion = urllib2.quote(assertion.encode('utf8'))
+        encoded_assertion = urllib.parse.quote(assertion.encode('utf8'))
         self.encoded_assertion = 'wa=wsignin1.0&wresult=' + encoded_assertion
 
     def _login_with_sp(self):
-        self.session.post(
+        r = self.session.post(
             url=self.sp_endpoint, data=self.encoded_assertion,
             headers=self.HEADER_X_FORM, allow_redirects=False,
             verify=self.verify)
-        # TODO(marek): check response code
+        r.raise_for_status()
 
     def login(self):
         self._prepare_adfs_request()
@@ -248,6 +246,5 @@ class ADFSClient(object):
     def access_resource(self, **kwargs):
         r = self.session.get(url=self.sp_url, verify=self.verify,
                              **kwargs)
-        if r.ok:
-            return r.content
-
+        r.raise_for_status()
+        return r.content
