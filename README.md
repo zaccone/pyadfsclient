@@ -42,3 +42,10 @@ params-free::
 * SP_ENDPOINT - Service Provider's endpoint, e.g. https://sp.example.com/Shibboleth.sso/ADFS
 * SP_URL - Service Provider's protected URL, e.g. https://sp.example.com/secure
 
+SSL/TLS certificates managing
+-----------------------------
+
+You can pass your own CA certificates by setting proper requests' environment
+variable - *REQUESTS_CA_BUNDLE*.
+For more information examine
+[`requests documentation`](http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification)
